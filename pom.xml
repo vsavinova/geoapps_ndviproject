@@ -36,6 +36,11 @@
                         <resource>
                             <!-- this is relative to the pom.xml directory -->
                             <directory>webapp</directory>
+                            <!--<directory>resources</directory>-->
+                            <!--<includes>-->
+                                <!--<include>**/*.tiff</include>-->
+                                <!--<include>**/*.TIFF</include>-->
+                            <!--</includes>-->
                         </resource>
                     </webResources>
                 </configuration>

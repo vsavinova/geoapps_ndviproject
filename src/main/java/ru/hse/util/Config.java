@@ -1,6 +1,5 @@
 package ru.hse.util;
 
-import gov.nasa.worldwind.geom.LatLon;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -13,27 +12,28 @@ public class Config {
 
     public Config() {
         this.datesAndFiles = new HashMap<>();
-        datesAndFiles.put("0117", getClass().getClassLoader().getResource("0117.png").getPath());
-        datesAndFiles.put("0217", getClass().getClassLoader().getResource("0217.png").getPath());
-        datesAndFiles.put("0317", getClass().getClassLoader().getResource("0317.png").getPath());
-        datesAndFiles.put("0417", getClass().getClassLoader().getResource("0417.png").getPath());
-        datesAndFiles.put("0517", getClass().getClassLoader().getResource("0517.png").getPath());
-        datesAndFiles.put("0617", getClass().getClassLoader().getResource("0617.png").getPath());
-        datesAndFiles.put("0717", getClass().getClassLoader().getResource("0717.png").getPath());
-        datesAndFiles.put("0817", getClass().getClassLoader().getResource("0817.png").getPath());
-        datesAndFiles.put("0917", getClass().getClassLoader().getResource("0917.png").getPath());
-        datesAndFiles.put("1017", getClass().getClassLoader().getResource("1017.png").getPath());
-        datesAndFiles.put("1117", getClass().getClassLoader().getResource("1117.png").getPath());
+        String path = getClass().getClassLoader().getResource("01.tiff").getPath().replace("01.tiff", "");//"/Users/victoria/IdeaProjects/mvcexample/src/main/resources/";
+        datesAndFiles.put("01", path + "01.tiff");
+        datesAndFiles.put("02", path + "02.TIFF");
+        datesAndFiles.put("03", path + "03.TIFF");
+        datesAndFiles.put("04", path + "04.TIFF");
+        datesAndFiles.put("05", path + "05.TIFF");
+        datesAndFiles.put("06", path + "06.TIFF");
+        datesAndFiles.put("07", path + "07.TIFF");
+        datesAndFiles.put("08", path + "08.TIFF");
+        datesAndFiles.put("09", path + "09.TIFF");
+        datesAndFiles.put("10", path + "10.TIFF");
+        datesAndFiles.put("11", path + "11.TIFF");
     }
 
     public Map<String, String> getDatesAndFiles() {
         return datesAndFiles;
     }
 
-    public LatLon getCoordinates(String str) {
-        String[] coords = str.split("_");
-        return LatLon.fromDegrees(Double.parseDouble(coords[0]), Double.parseDouble(coords[1])); // lat, lon
-    }
+//    public LatLon getCoordinates(String str) {
+//        String[] coords = str.split("_");
+//        return LatLon.fromDegrees(Double.parseDouble(coords[0]), Double.parseDouble(coords[1])); // lat, lon
+//    }
 
 
     public double[] getDoubleCoordinates(String str) {
@@ -41,11 +41,20 @@ public class Config {
         return new double[]{Double.parseDouble(coords[0]), Double.parseDouble(coords[1])}; // lat, lon
     }
 
-    public Integer getTileNumberForCoords(String tr, String bl){
-        double[] trCoords = getDoubleCoordinates(tr);
-        double[] blCoords = getDoubleCoordinates(bl);
+    public Integer[] getTileNumberForCoords(String coords, int numOfTiles) {
+        double[] dooubleCoords = getDoubleCoordinates(coords);
 
-        return 0; // TODO: доделать
+        double tileWidth = 360.0 / numOfTiles;
+        double tileHeight = 360.0 / numOfTiles;
+
+        int tileStartX =  (int) ((dooubleCoords[0] + 180) / tileWidth);
+//        int tileStartX = dooubleCoords[0] > 0 ? (int) (dooubleCoords[0] / tileWidth) + numOfTiles / 2
+//                : (int) (Math.abs(dooubleCoords[0]) / tileWidth);
+        int tileStartY = (int) ((dooubleCoords[1] + 180) / tileHeight);
+//        int tileStartY = dooubleCoords[1] >= 0 ? (int) (dooubleCoords[1] / tileHeight) + numOfTiles / 2
+//                : (int) (Math.abs(dooubleCoords[1]) / tileHeight);
+
+        return new Integer[]{tileStartX, tileStartY}; // TODO: доделать
     }
 
 }

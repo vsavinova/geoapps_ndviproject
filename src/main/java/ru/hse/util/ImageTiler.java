@@ -14,6 +14,7 @@ import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.image.ImageWorker;
 import org.geotools.resources.Arguments;
+import org.opengis.coverage.grid.GridCoverageReader;
 import org.opengis.geometry.Envelope;
 import org.opengis.parameter.ParameterValueGroup;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -97,8 +98,9 @@ public class ImageTiler {
     }
 
      public void tile() throws IOException {
-        AbstractGridFormat format = GridFormatFinder.findFormat(this.getInputFile());
-        String fileExtension = this.getFileExtension(this.getInputFile());
+//        AbstractGridFormat format = GridFormatFinder.findFormat(this.getInputFile());
+         final GeoTiffFormat format = new GeoTiffFormat();
+         String fileExtension = this.getFileExtension(this.getInputFile());
 
         //working around a bug/quirk in geotiff loading via format.getReader which doesn't set this
         //correctly
@@ -107,9 +109,10 @@ public class ImageTiler {
             hints = new Hints(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER,Boolean.TRUE);
         }
 
-        GridCoverage2DReader gridReader = format.getReader(
-                this.getInputFile(),
-                hints);
+//        GridCoverage2DReader gridReader = format.getReader(
+//                this.getInputFile(),
+//                hints);
+         GridCoverage2DReader gridReader = format.getReader(inputFile);
         GridCoverage2D gridCoverage = gridReader.read(null);
         Envelope2D coverageEnvelope = gridCoverage.getEnvelope2D();
         double coverageMinX = coverageEnvelope.getBounds().getMinX();
@@ -196,8 +199,9 @@ public class ImageTiler {
         ImageLayout il = new ImageLayout();
         Hints hints = new Hints();
         hints.put(JAI.KEY_IMAGE_LAYOUT, il);
-        il.setTileHeight(TILE_SIZE);
-        il.setTileWidth(TILE_SIZE);
+//        il.setTileHeight(TILE_SIZE);
+//        il.setTileWidth(TILE_SIZE);
+
         // Mosaic operation
         GridCoverage2D mosaic = (GridCoverage2D) processor.doOperation(param, hints);
 
